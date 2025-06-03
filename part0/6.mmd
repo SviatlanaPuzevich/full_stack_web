@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/spa/new_note_spa
+    Note right of browser: The browser sends the new note as JSON data to the server
+    activate server 
+    server-->>browser:  HTTP 201 Found Location: https://studies.cs.helsinki.fi/exampleapp/notes
+        Note right of browser: TheJavaScript code redraws the notes
