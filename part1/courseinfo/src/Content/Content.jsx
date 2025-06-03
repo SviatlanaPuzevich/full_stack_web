@@ -1,7 +1,7 @@
 import {Part} from "../Part/Part.jsx";
 
-export const Content = ({partInfoList}) => {
+export const Content = ({partList}) => {
   return <>
-    {partInfoList.map((item, index) => (<Part key={index} partName={item[0]} exerciseCount={item[1]}/>))}
+    {partList.map((item, index) => (<Part key={index} partName={item.name} exerciseCount={item.exercises}/>))}
   </>
 }
