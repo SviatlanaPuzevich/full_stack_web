@@ -1,26 +1,29 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import shortid from 'shortid';
 import {ContactForm} from "./ContactForm/ContactForm.jsx";
 import {ContactList} from "./ContactList/ContactList.jsx";
 import {NameFilter} from "./NameFilter/NameFilter.jsx";
+import axios from "axios";
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', phoneNumber: '040-123456', id: 1},
-    {name: 'Ada Lovelace', phoneNumber: '39-44-5323523', id: 2},
-    {name: 'Dan Abramov', phoneNumber: '12-43-234345', id: 3},
-    {name: 'Mary Poppendieck', phoneNumber: '39-23-6423122', id: 4}
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data);
+      })
+  }, []);
   const handleCreateNewContact = (e) => {
     e.preventDefault();
     if (persons.map(person => person.name).includes(newName)) {
       alert(`${newName} is already in use`);
     } else {
-      setPersons([...persons, {name: newName, id: shortid.generate(), phoneNumber: phoneNumber}]);
+      setPersons([...persons, {name: newName, id: shortid.generate(), number: phoneNumber}]);
     }
     setNewName('');
     setPhoneNumber('');
