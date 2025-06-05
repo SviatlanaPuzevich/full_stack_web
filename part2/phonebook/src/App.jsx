@@ -3,7 +3,7 @@ import shortid from 'shortid';
 import {ContactForm} from "./ContactForm/ContactForm.jsx";
 import {ContactList} from "./ContactList/ContactList.jsx";
 import {NameFilter} from "./NameFilter/NameFilter.jsx";
-import axios from "axios";
+import contactsService from "./services/contacts.js"
 
 
 const App = () => {
@@ -13,32 +13,54 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data);
-      })
+     contactsService
+       .getAll()
+       .then(data => setPersons(data))
+       .catch(err => console.log(err));
   }, []);
-  const handleCreateNewContact = (e) => {
+
+  const onCreateNewContact = (e) => {
     e.preventDefault();
-    if (persons.map(person => person.name).includes(newName)) {
-      alert(`${newName} is already in use`);
+    const existingPerson = persons.find(person => person.name === newName);
+    const newContact = {name: newName, id: shortid.generate(), number: phoneNumber};
+    if (existingPerson) {
+      let shouldUpdate = confirm(`Do you really want to update ${existingPerson.name}?`);
+      if (shouldUpdate) {
+        updatePhoneNumber(existingPerson.id, newContact);
+      }
     } else {
-      setPersons([...persons, {name: newName, id: shortid.generate(), number: phoneNumber}]);
+      contactsService
+        .create(newContact)
+        .then(data => setPersons([...persons,data]))
+        .catch((err) => console.log(err));
     }
     setNewName('');
     setPhoneNumber('');
     setFilter("");
   }
 
+  const updatePhoneNumber = (id, data) => {
+    contactsService
+      .update(id, data)
+      .then(data => setPersons(persons.map((person) => person.id === data.id ? data : person)))
+  }
+
+  const onDelete = (id) => {
+      contactsService
+        .deleteContact(id)
+        .then(data => setPersons(persons.filter(person => person.id !== data.id)))
+        .catch((err) => console.log(`can't delete contact by id ${id}`, err));
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
       <NameFilter filter={filter} onChangeFilter={(e) => setFilter(e.target.value)}/>
-      <ContactForm onAddContact={handleCreateNewContact} phoneNumber={phoneNumber}
+      <ContactForm onAddContact={onCreateNewContact} phoneNumber={phoneNumber}
                    name={newName} onNameChange={(e) => setNewName(e.target.value)}
                    onNumberChange={(e) => setPhoneNumber(e.target.value)}/>
       <h2>Numbers</h2>
-      <ContactList contacts={persons} filter={filter}/>
+      <ContactList contacts={persons} filter={filter} onDelete={onDelete}/>
     </div>
   )
 }
