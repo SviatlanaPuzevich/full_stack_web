@@ -6,7 +6,9 @@ export const CountryList = ({list, onShowCountry}) => {
     return <p>too many countries, specify another filters</p>
   }
   return (<ul>{
-    list.map((item) => <li key={item.name.common}>{item.name.common} <button data-country={item.name.common} onClick={onShowCountry}>Show</button></li>)
+    list.map((item) => <li key={item.name.common}>{item.name.common}
+      <button onClick={() => onShowCountry(item.name.common)}>Show</button>
+    </li>)
   }
   </ul>)
 }

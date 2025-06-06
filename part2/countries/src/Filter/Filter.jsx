@@ -1,6 +1,6 @@
-export const Filter=({filter, onChange})=>{
+export const Filter=({value, onChange})=>{
   return (<div>
     <label htmlFor="filter-input">Filter:</label>
-    <input value={filter} onChange={onChange} id="filter-input"/>
+    <input value={value} onChange={onChange} id="filter-input"/>
   </div>)
 }

@@ -18,21 +18,26 @@ function App() {
 
   const searchString = filter.trim().toLowerCase();
   const filteredCountries = countries.filter(country => country.name.common.toLowerCase().startsWith(searchString));
-  const showSingle = (filteredCountries && filteredCountries.length === 1);
+
+  useEffect(() => {
+    if (filteredCountries.length === 1) {
+      setSelectedCountry(filteredCountries[0].name.common);
+    }
+  }, [filteredCountries]);
 
   const onFilterChange = (e) => {
     setFilter(e.target.value);
     setSelectedCountry(null);
   }
 
-  const onShowCountry = (e) => {
-    setSelectedCountry(e.target.dataset.country);
+  const onShowCountry = (country) => {
+    setSelectedCountry(country);
   }
 
   return (<>
-    <Filter onChange={onFilterChange} filter={filter}/>
-    {(selectedCountry || showSingle)
-      ? <Country name={selectedCountry ? selectedCountry : filteredCountries[0].name.common}/>
+    <Filter onChange={onFilterChange} value={filter}/>
+    {selectedCountry
+      ? <Country name={selectedCountry}/>
       : <CountryList list={filteredCountries} onShowCountry={onShowCountry}/>
     }
   </>)

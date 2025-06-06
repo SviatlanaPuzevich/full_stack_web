@@ -8,11 +8,9 @@ export const Country = ({name}) => {
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
       .then(res => setCountry(res.data))
-      .catch(err => console.log(err))
+      .catch(console.error)
   }, [name]);
-  if(name == null) {
-    return null;
-  }
+
   if (!country) {
     return <div>Loading...</div>;
   }
