@@ -1,15 +1,13 @@
 export const Contact = ({contact, onDelete}) => {
-  const handleDelete = (e) => {
-    let shouldDelete = confirm(`Are you would like to delete ${contact.name}?`);
-    if (shouldDelete) {
-      const idToDelete = e.currentTarget.dataset.id;
-      onDelete(idToDelete);
+  const handleDelete = (id) => {
+    if (confirm(`Are you would like to delete ${contact.name}?`)) {
+      onDelete(id);
     }
   };
   return (
     <div>
       <span>{`${contact.name} ${contact.number}`}</span>
-      <button data-id={contact.id} onClick={handleDelete}>Delete</button>
+      <button onClick={() => handleDelete(contact.id)}>Delete</button>
     </div>
   )
 };
