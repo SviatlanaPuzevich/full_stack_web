@@ -1,6 +1,12 @@
 const express = require('express')
+const morgan = require('morgan')
+const {request} = require("express");
 const app = express()
 app.use(express.json())
+morgan.token('person', (req) => {
+  return JSON.stringify(req.body);
+})
+app.use(morgan(':method :url :status :response-time :person'))
 
 let persons = [
   {
@@ -41,7 +47,7 @@ app.get('/api/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id;
-  const person = persons.find(person=> person.id === id);
+  const person = persons.find(person => person.id === id);
   if (!person) {
     return response.status(404).end();
   }
@@ -50,29 +56,27 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id;
-  persons = persons.filter(person=> person.id !== id);
+  persons = persons.filter(person => person.id !== id);
   response.status(204).end();
 })
 
 app.post('/api/persons', (request, response) => {
   const body = request.body;
-  console.log(body);
-  if(!body.name || !body.number) {
+  if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number missing'
     })
   }
-  if(persons.some(person=> person.name === body.name)) {
+  if (persons.some(person => person.name === body.name)) {
     return response.status(400).json({
       error: 'name must be unique'
     })
   }
-  const id = Math.floor(Math.random()*1000);
-  console.log(id);
+  const id = Math.floor(Math.random() * 1000);
   const person = {
     id,
     name: body.name,
-    number: body.number || '',
+    number: body.number,
   }
   persons = [...persons, person]
   response.json(person);
