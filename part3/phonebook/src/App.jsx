@@ -66,7 +66,9 @@ const App = () => {
   const onDelete = (id) => {
     contactsService
       .deleteContact(id)
-      .then(data => setPersons(persons.filter(person => person.id !== data.id)))
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
       .catch(() => showNotification(`can't delete contact by id ${id}`, 'error'));
   }
 
