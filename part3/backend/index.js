@@ -1,6 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 
 const app = express()
 
@@ -9,9 +8,6 @@ morgan.token('person', (req) => {
   return JSON.stringify(req.body);
 })
 app.use(morgan(':method :url :status :response-time :person'))
-app.use(cors({
-  origin: 'http://localhost:5173',
-}))
 
 app.use(express.static('dist'))
 
