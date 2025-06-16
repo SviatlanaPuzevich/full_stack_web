@@ -1,0 +1,6 @@
+.contactFormContainer {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 5px;
+    padding: 10px;
+}

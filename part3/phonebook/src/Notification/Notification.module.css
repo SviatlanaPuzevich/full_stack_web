@@ -1,0 +1,17 @@
+.notification {
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+    border-radius: 5px;
+    min-height: 20px;
+    padding: 5px;
+}
+
+.error {
+    color: var(--error-color);
+    border-color:  var(--error-color);
+}
+
+.update {
+    color: var(--update-color);
+    border-color:  var(--update-color);
+}

@@ -73,16 +73,18 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>Phonebook</h2>
+    <>
+      <header><h1>Phonebook</h1></header>
+      <main>
       <Notification message={message} type={messageType}/>
       <NameFilter filter={filter} onChangeFilter={(e) => setFilter(e.target.value)}/>
       <ContactForm onAddContact={onCreateNewContact} phoneNumber={phoneNumber}
                    name={newName} onNameChange={(e) => setNewName(e.target.value)}
                    onNumberChange={(e) => setPhoneNumber(e.target.value)}/>
-      <h2>Numbers</h2>
+
       <ContactList contacts={persons} filter={filter} onDelete={onDelete}/>
-    </div>
+      </main>
+    </>
   )
 }
 

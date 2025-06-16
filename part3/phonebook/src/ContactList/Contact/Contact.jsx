@@ -5,9 +5,10 @@ export const Contact = ({contact, onDelete}) => {
     }
   };
   return (
-    <div>
-      <span>{`${contact.name} ${contact.number}`}</span>
+    <>
+      <div>{contact.name}</div>
+      <div>{contact.number}</div>
       <button onClick={() => handleDelete(contact.id)}>Delete</button>
-    </div>
+    </>
   )
 };

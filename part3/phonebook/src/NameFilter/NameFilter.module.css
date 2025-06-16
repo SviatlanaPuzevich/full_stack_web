@@ -1,0 +1,6 @@
+.nameFilterContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding: 10px;
+}

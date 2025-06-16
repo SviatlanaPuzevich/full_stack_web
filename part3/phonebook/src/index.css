@@ -1,17 +1,8 @@
-.notification {
-    color: #04AA6D;
-    border: 1px solid #04AA6D;
-    border-radius: 5px;
-    max-height: 20px;
-    padding: 5px;
-}
+@import "normalize.css";
 
-.error {
-    color: #f44336;
-    border-color:  #f44336;
-}
-
-.update {
-    color: #ff9800;
-    border-color:  #ff9800;
+:root {
+    --primary-color: #645bff;
+    --error-color: #f44336;
+    --update-color: #ff9800;
+    --success-color: #04AA6D;
 }
