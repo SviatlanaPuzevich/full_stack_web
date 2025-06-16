@@ -24,7 +24,7 @@ const App = () => {
   const onCreateNewContact = (e) => {
     e.preventDefault();
     const existingPerson = persons.find(person => person.name === newName);
-    const newContact = {name: newName,  number: phoneNumber};
+    const newContact = {name: newName, number: phoneNumber};
     if (existingPerson) {
       let shouldUpdate = confirm(`Do you really want to update ${existingPerson.name}?`);
       if (shouldUpdate) {
@@ -40,7 +40,7 @@ const App = () => {
             setTimeout(() => setMessage(null), 3000);
           }
         )
-        .catch((err) => showNotification(err, 'error'));
+        .catch((error) => showNotification(error.response.data.error, 'error'));
     }
     setNewName('');
     setPhoneNumber('');
@@ -60,7 +60,7 @@ const App = () => {
         setPersons(persons.map((person) => person.id === data.id ? data : person));
         showNotification(`The contact ${data.name} was updated`, 'update');
       })
-      .catch(() => showNotification(`The contact ${data.name} can't be updated`, 'error'));
+      .catch((error) => showNotification(error.response.data.error, 'error'));
   }
 
   const onDelete = (id) => {
@@ -69,20 +69,20 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(person => person.id !== id))
       })
-      .catch(() => showNotification(`can't delete contact by id ${id}`, 'error'));
+      .catch((error) => showNotification(error.response.data.error, 'error'));
   }
 
   return (
     <>
       <header><h1>Phonebook</h1></header>
       <main>
-      <Notification message={message} type={messageType}/>
-      <NameFilter filter={filter} onChangeFilter={(e) => setFilter(e.target.value)}/>
-      <ContactForm onAddContact={onCreateNewContact} phoneNumber={phoneNumber}
-                   name={newName} onNameChange={(e) => setNewName(e.target.value)}
-                   onNumberChange={(e) => setPhoneNumber(e.target.value)}/>
+        <Notification message={message} type={messageType}/>
+        <NameFilter filter={filter} onChangeFilter={(e) => setFilter(e.target.value)}/>
+        <ContactForm onAddContact={onCreateNewContact} phoneNumber={phoneNumber}
+                     name={newName} onNameChange={(e) => setNewName(e.target.value)}
+                     onNumberChange={(e) => setPhoneNumber(e.target.value)}/>
 
-      <ContactList contacts={persons} filter={filter} onDelete={onDelete}/>
+        <ContactList contacts={persons} filter={filter} onDelete={onDelete}/>
       </main>
     </>
   )

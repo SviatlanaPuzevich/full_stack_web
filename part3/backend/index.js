@@ -7,14 +7,10 @@ const app = express()
 app.use(express.static('dist'))
 app.use(express.json())
 morgan.token('person', (req) => {
-  return JSON.stringify(req.body);
+  return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :status :response-time :person'))
 
-
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
-})
 
 app.get('/api/persons', (request, response, next) => {
   Person.find({}).then((result) => {
@@ -36,7 +32,7 @@ app.get('/api/info', (request, response, next) => {
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-  const id = request.params.id;
+  const id = request.params.id
   Person.findById(id).then((result) => {
     response.send(result)
   })
@@ -44,21 +40,21 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-  const id = request.params.id;
-  Person.deleteOne({_id: id}).then(() => {
-    response.status(204).end();
+  const id = request.params.id
+  Person.deleteOne({ _id: id } ).then(() => {
+    response.status(204).end()
   }).catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
-  const body = request.body;
+  const body = request.body
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number missing'
     })
   }
 
-  Person.findOne({name: body.name}).then(existing => {
+  Person.findOne({ name: body.name }).then(existing => {
     if (existing) {
       return response.status(400).json({
         error: 'name must be unique'
@@ -81,7 +77,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       if (!person) {
         return response.status(404).end()
       }
-      person.name = request.body.name;
+      person.name = request.body.name
       person.number = request.body.number
       return person.save().then(updatedPerson => response.json(updatedPerson))
     })
@@ -90,7 +86,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({error: 'unknown endpoint'})
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
 
@@ -98,7 +94,7 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   }
 
   next(error)
