@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Harry Potter",
+  "author": "Joanne Rowling",
+  "url": "https://de.wikipedia.org/wiki/Joanne_K._Rowling",
+  "likes": 50
+}
