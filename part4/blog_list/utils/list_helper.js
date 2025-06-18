@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const dummy = (blogs) => {
   return 1
 }
@@ -13,28 +14,23 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   if (!blogs || blogs.length === 0) return null
-  let authorMap = new Map()
-  blogs.forEach(blog => authorMap.set(blog.author, (authorMap.get(blog.author) || 0) + 1))
-  let result = {blogs: 0};
-  for (let [author, blogs] of authorMap.entries()) {
-    if (blogs > result.blogs) {
-      result = { author, blogs }
-    }
-  }
-  return result
+  const groupedByAuthor = _.groupBy(blogs, 'author')
+  const authorBlogs = _.map(groupedByAuthor, (blogs, author) => ({
+    author,
+    blogs: blogs.length
+  }))
+  return _.maxBy(authorBlogs, 'blogs')
 }
 
 const mostLikes = (blogs) => {
   if (!blogs || blogs.length === 0) return null
-  let authorMap = new Map()
-  blogs.forEach(blog => authorMap.set(blog.author, blog.likes + (authorMap.get(blog.author) || 0)))
-  let result = {likes: -1}
-  for (let [author, likes] of authorMap.entries()) {
-    if (likes > result.likes) {
-      result = { author, likes }
-    }
-  }
-  return result
+  const groupedByAuthor = _.groupBy(blogs, 'author')
+  const authorLikes = _.map(groupedByAuthor, (blogs, author) =>
+    ({
+      author,
+      likes: _.sumBy(blogs, 'likes')
+    }))
+  return _.maxBy(authorLikes, 'likes')
 }
 
 module.exports = {

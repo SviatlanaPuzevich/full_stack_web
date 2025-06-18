@@ -106,9 +106,9 @@ describe('mostBlogs', () => {
 
   test('when blog list has only one blog equals one author', () => {
     assert.deepStrictEqual(listHelper.mostBlogs(listWithOneBlog), {
-        author: 'Edsger W. Dijkstra',
-        blogs: 1
-      })
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
   })
 
   test('of bigger list calculate the author who has most blogs', () => {
