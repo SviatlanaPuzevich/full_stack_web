@@ -37,7 +37,6 @@ const App = () => {
             setPersons([...persons, data]);
             showNotification(`The contact ${data.name} was created`)
             setMessage(`The contact ${data.name} was created`);
-            setTimeout(() => setMessage(null), 3000);
           }
         )
         .catch((error) => showNotification(error.response.data.error, 'error'));
@@ -77,11 +76,10 @@ const App = () => {
       <header><h1>Phonebook</h1></header>
       <main>
         <Notification message={message} type={messageType}/>
-        <NameFilter filter={filter} onChangeFilter={(e) => setFilter(e.target.value)}/>
-        <ContactForm onAddContact={onCreateNewContact} phoneNumber={phoneNumber}
-                     name={newName} onNameChange={(e) => setNewName(e.target.value)}
-                     onNumberChange={(e) => setPhoneNumber(e.target.value)}/>
-
+        <NameFilter filter={filter} onChange={setFilter}/>
+        <ContactForm onAddContact={onCreateNewContact} contact={{phoneNumber, name: newName}}
+                     onNameChange={setNewName}
+                     onNumberChange={setPhoneNumber}/>
         <ContactList contacts={persons} filter={filter} onDelete={onDelete}/>
       </main>
     </>
