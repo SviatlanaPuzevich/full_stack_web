@@ -1,8 +1,8 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
-import {LoginFrom} from "./components/LoginFrom.jsx"
-import {BlogList} from "./components/BlogList.jsx"
-import {Message} from "./components/Message.jsx"
+import { LoginFrom } from './components/LoginForm/LoginFrom.jsx'
+import { BlogList } from './components/BlogList/BlogList.jsx'
+import { Message } from './components/Message/Message.jsx'
 
 const App = () => {
   const [user, setUser] = useState(null)

@@ -1,8 +1,10 @@
+import styles from './Message.module.css'
+
 export const Message = ({ message }) => {
   if (!message) {
     return null
   }
   return (
-    <div>{message}</div>
+    <div className={styles.success}>{message}</div>
   )
 }
