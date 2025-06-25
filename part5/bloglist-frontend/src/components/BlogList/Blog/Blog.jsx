@@ -3,7 +3,6 @@ import styles from './Blog.module.css'
 import { Togglable } from '../../Togglable/Togglable.jsx'
 
 const Blog = ({ blog, update, deleteBlog, user }) => {
-  console.log(blog)
   const handleDelete = () => {
     if (confirm(`Delete blog ${blog.title} by ${blog.author}`)) {
       deleteBlog(blog.id)
@@ -19,7 +18,6 @@ const Blog = ({ blog, update, deleteBlog, user }) => {
         (<button onClick={handleDelete}>Delete</button>)
       }
     </Togglable>
-
   </div>)
 }
 

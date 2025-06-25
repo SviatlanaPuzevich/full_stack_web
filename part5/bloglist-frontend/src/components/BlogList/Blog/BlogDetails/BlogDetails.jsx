@@ -5,7 +5,6 @@ export const BlogDetails = ({ blog, update }) => {
   const addLike = async () => {
     const blogToUpdate = { ...blog, likes: likes + 1 }
     const updatedBlog = await update(blogToUpdate)
-    console.log(updatedBlog)
     setLikes(updatedBlog.likes)
   }
   return (<>
