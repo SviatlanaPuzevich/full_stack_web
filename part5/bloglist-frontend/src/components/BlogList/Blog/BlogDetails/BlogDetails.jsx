@@ -9,7 +9,7 @@ export const BlogDetails = ({ blog, update }) => {
   }
   return (<>
     <div>{blog.url}</div>
-    <div>{likes}
+    <div data-testid="like" >{likes}
       <button onClick={addLike}>like</button>
     </div>
     <div>{blog.user?.name || ''}</div>

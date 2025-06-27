@@ -38,7 +38,7 @@ export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
         <form onSubmit={handleLogin} className={styles.formGrid}>
           <div className={styles.formRow}>
             <label>username
-              <input
+              <input  data-testid='username'
                 type="text"
                 value={username}
                 name="Username"
@@ -48,7 +48,7 @@ export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
           <div className={styles.formRow}>
             <label>
               password
-              <input
+              <input  data-testid='password'
                 type="password"
                 value={password}
                 name="Password"
@@ -61,7 +61,7 @@ export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
       </>
     )
   }
-  return (<div>{`${user.name} logged in `}
-    <button onClick={handleLogout}>logout</button>
+  return (<div><span>{`${user.name} logged in`}</span>
+    <button data-testid="logout" onClick={handleLogout}>logout</button>
   </div>)
 }

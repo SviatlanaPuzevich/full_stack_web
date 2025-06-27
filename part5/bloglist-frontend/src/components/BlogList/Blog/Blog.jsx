@@ -8,7 +8,7 @@ const Blog = ({ blog, update, deleteBlog, user }) => {
       deleteBlog(blog.id)
     }
   }
-  return (<div className={styles.blogContainer}>
+  return (<div data-testid="blog-item" className={styles.blogContainer}>
     {blog.title} {blog.author}
     <Togglable showLabel='view' hideLabel="hide">
       <BlogDetails blog={blog} update={update}/>
