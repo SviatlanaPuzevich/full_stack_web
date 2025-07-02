@@ -1,41 +1,56 @@
 import {createSlice} from "@reduxjs/toolkit";
-
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
-const initialState = anecdotesAtStart.map(asObject)
+import anecdoteService from "../services/anecdotes.js"
+import {setNotification} from "./notificationReducer.js";
 
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
-  initialState,
+  initialState: [],
   reducers: {
+    setAnecdotes (state, {payload}) {
+      return payload
+    },
     createAnecdote(state, action) {
-      state.push(asObject(action.payload))
+      state.push(action.payload)
     },
     voteFor(state, action) {
-      const id = action.payload
+      const id = action.payload.id
       return state.map((item) =>
-        item.id === id ? {...item, votes: item.votes + 1} : item
+        item.id === id ? action.payload : item
       )
     }
   }
 })
 
-export const {createAnecdote, voteFor} = anecdoteSlice.actions
+export const {setAnecdotes, createAnecdote, voteFor} = anecdoteSlice.actions
 export default anecdoteSlice.reducer
+
+export const initializeAnecdotes = () => {
+    return async (dispatch) => {
+      const anecdotes = await anecdoteService.getAll()
+      dispatch(setAnecdotes(anecdotes))
+    }
+}
+
+export const addNewAnecdote = (content) => {
+  return async (dispatch) => {
+    try {
+      const savedAnecdote = await anecdoteService.createNew(content)
+      dispatch(createAnecdote(savedAnecdote))
+      dispatch(setNotification(`you saved ${savedAnecdote.content}`, 5))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
+
+export const voteForAnecdote = (anecdote) => {
+  return async (dispatch) => {
+    try {
+      const updatedAnecdote = await anecdoteService.update(anecdote)
+      dispatch(voteFor(updatedAnecdote))
+      dispatch(setNotification(`you voted for ${updatedAnecdote.content}`, 5))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
