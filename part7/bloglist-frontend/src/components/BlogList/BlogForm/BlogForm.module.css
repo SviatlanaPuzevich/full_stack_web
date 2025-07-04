@@ -1,0 +1,14 @@
+.formGrid {
+  display: grid;
+  grid-template-columns: max-content 150px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.formRow {
+  display: contents;
+}
+
+label {
+  display: contents;
+}
