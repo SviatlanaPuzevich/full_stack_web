@@ -2,12 +2,14 @@ import loginService from '../../services/login.js'
 import blogService from '../../services/blogs.js'
 import { useState } from 'react'
 import styles from './LoginForm.module.css'
+import { useNotificationDispatch } from '../Notification/NotificationContext.jsx'
 
 const LOGGED_USER_ITEM_NAME = 'loggedBlogAppUser'
 
-export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
+export const LoginFrom = ({ user, setUser}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const notificationDispatch = useNotificationDispatch()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -22,7 +24,10 @@ export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
       window.localStorage.setItem(LOGGED_USER_ITEM_NAME, JSON.stringify(user))
       blogService.setToken(user.token)
     } catch (exception) {
-      setErrorMessage({message:'Wrong credentials', type: 'error'})
+      notificationDispatch({
+        type: 'SHOW',
+        notification: { message: 'Wrong credentials', type: 'error' }
+      })
     }
   }
 

@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import blogService from '../../services/blogs.js'
 import { BlogForm } from './BlogForm/BlogForm.jsx'
 import { Togglable } from '../Togglable/Togglable.jsx'
+import { useNotificationDispatch } from '../Notification/NotificationContext.jsx'
 
-export const BlogList = ({ user, setMessage }) => {
+export const BlogList = ({ user }) => {
   const [blogs, setBlogs] = useState([])
+  const notificationDispatch = useNotificationDispatch()
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -20,10 +22,17 @@ export const BlogList = ({ user, setMessage }) => {
       blogFormRef.current.toggleVisibility()
       const savedBlog = await blogService.create(blog)
       setBlogs([...blogs, savedBlog])
-      setMessage({ message: 'Blog created successfully.', type: 'success' })
+      notificationDispatch({
+        type: 'SHOW',
+        notification: { message: 'Blog created successfully.', type: 'success' }
+      })
       return savedBlog
     } catch (error) {
-      setMessage({ message: error.message })
+      notificationDispatch(
+        {
+          type: 'SHOW',
+          notification: { message: error.response.data.error, type: 'error' }
+        })
     }
   }
 
@@ -31,8 +40,16 @@ export const BlogList = ({ user, setMessage }) => {
     try {
       await blogService.deleteBlog(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
+      notificationDispatch({
+        type: 'SHOW',
+        notification: { message: 'Blog deleted successfully.', type: 'update' }
+      })
     } catch (error) {
-      setMessage({ message: error.message })
+      notificationDispatch(
+        {
+          type: 'SHOW',
+          notification: { message: error.response.data.error, type: 'error' }
+        })
     }
   }
 
@@ -42,10 +59,17 @@ export const BlogList = ({ user, setMessage }) => {
       setBlogs(
         blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
       )
-      setMessage({ message: 'Blog updated successfully.', type: 'update' })
+      notificationDispatch({
+        type: 'SHOW',
+        notification: { message: 'Blog updated successfully.', type: 'update' }
+      })
       return updatedBlog
     } catch (error) {
-      setMessage({ message: error.message })
+      notificationDispatch(
+        {
+          type: 'SHOW',
+          notification: { message: error.response.data.error, type: 'error' }
+        })
     }
   }
   if (!user) {

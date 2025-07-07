@@ -6,11 +6,6 @@ import { Notification } from './components/Notification/Notification.jsx'
 
 const App = () => {
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
-  const showNotification = (notification) => {
-    setNotification(notification)
-    setTimeout(() => setNotification(null), 2000)
-  }
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -22,9 +17,9 @@ const App = () => {
 
   return (
     <>
-      <Notification notification={notification} />
-      <LoginFrom user={user} setUser={setUser} setErrorMessage={showNotification} />
-      <BlogList user={user} setMessage={showNotification} />
+      <Notification/>
+      <LoginFrom user={user} setUser={setUser} />
+      <BlogList user={user} />
     </>
   )
 }
