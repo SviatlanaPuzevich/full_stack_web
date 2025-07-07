@@ -1,26 +1,15 @@
-import { useState, useEffect } from 'react'
-import blogService from './services/blogs'
 import { LoginFrom } from './components/LoginForm/LoginFrom.jsx'
 import { BlogList } from './components/BlogList/BlogList.jsx'
 import { Notification } from './components/Notification/Notification.jsx'
+import { UserProvider } from './components/contextes/UserContext.jsx'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
   return (
-    <>
+    <UserProvider>
       <Notification />
-      <LoginFrom user={user} setUser={setUser} />
-      <BlogList user={user} />
-    </>
+      <LoginFrom />
+      <BlogList />
+    </UserProvider>
   )
 }
 

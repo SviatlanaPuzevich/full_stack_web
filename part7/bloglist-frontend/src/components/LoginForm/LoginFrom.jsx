@@ -1,15 +1,14 @@
 import loginService from '../../services/login.js'
-import blogService from '../../services/blogs.js'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import styles from './LoginForm.module.css'
-import { useNotificationDispatch } from '../Notification/NotificationContext.jsx'
+import { useNotificationDispatch } from '../contextes/NotificationContext.jsx'
+import userContext from '../contextes/UserContext.jsx'
 
-const LOGGED_USER_ITEM_NAME = 'loggedBlogAppUser'
-
-export const LoginFrom = ({ user, setUser }) => {
+export const LoginFrom = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const notificationDispatch = useNotificationDispatch()
+  const [user, userDispatch] = useContext(userContext)
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -18,11 +17,9 @@ export const LoginFrom = ({ user, setUser }) => {
         username,
         password,
       })
-      setUser(user)
+      userDispatch({ type: 'LOGIN', user })
       setUsername('')
       setPassword('')
-      window.localStorage.setItem(LOGGED_USER_ITEM_NAME, JSON.stringify(user))
-      blogService.setToken(user.token)
     } catch (exception) {
       notificationDispatch({
         type: 'SHOW',
@@ -31,10 +28,8 @@ export const LoginFrom = ({ user, setUser }) => {
     }
   }
 
-  const handleLogout = () => {
-    window.localStorage.removeItem(LOGGED_USER_ITEM_NAME)
-    setUser(null)
-  }
+  const handleLogout = () => userDispatch({ type: 'LOGOUT' })
+
   if (!user) {
     return (
       <>

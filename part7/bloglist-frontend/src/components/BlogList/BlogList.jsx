@@ -1,16 +1,18 @@
 import Blog from './Blog/Blog.jsx'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import blogService from '../../services/blogs.js'
 import { BlogForm } from './BlogForm/BlogForm.jsx'
 import { Togglable } from '../Togglable/Togglable.jsx'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useUser } from '../contextes/UserContext.jsx'
 
-export const BlogList = ({ user }) => {
+export const BlogList = () => {
   const resultBlogs = useQuery({
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
     retry: 1,
   })
+  const user = useUser()
 
   const blogFormRef = useRef()
 

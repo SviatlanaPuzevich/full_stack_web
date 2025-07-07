@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import blogService from '../../../../services/blogs.js'
-import { useNotificationDispatch } from '../../../Notification/NotificationContext.jsx'
+import { useNotificationDispatch } from '../../../contextes/NotificationContext.jsx'
 
 export const BlogDetails = ({ blog }) => {
   const queryClient = useQueryClient()

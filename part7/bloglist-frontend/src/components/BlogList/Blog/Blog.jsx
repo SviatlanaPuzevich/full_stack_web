@@ -2,7 +2,7 @@ import { BlogDetails } from './BlogDetails/BlogDetails.jsx'
 import styles from './Blog.module.css'
 import { Togglable } from '../../Togglable/Togglable.jsx'
 import blogService from '../../../services/blogs.js'
-import { useNotificationDispatch } from '../../Notification/NotificationContext.jsx'
+import { useNotificationDispatch } from '../../contextes/NotificationContext.jsx'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const Blog = ({ blog, user }) => {
