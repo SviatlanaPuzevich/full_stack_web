@@ -1,30 +1,25 @@
-import { useState, useEffect } from 'react'
-import blogService from './services/blogs'
+import { useEffect } from 'react'
 import { LoginFrom } from './components/LoginForm/LoginFrom.jsx'
 import { BlogList } from './components/BlogList/BlogList.jsx'
 import { Notification } from './components/Notification/Notification.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllBlogs } from './reducers/blogsReducer.js'
+import { getUser } from './reducers/userReducer.js'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
-  const showNotification = (notification) => {
-    setNotification(notification)
-    setTimeout(() => setNotification(null), 2000)
-  }
+  const notification = useSelector((state) => state.notification)
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
+    dispatch(getUser())
+    dispatch(getAllBlogs())
   }, [])
 
   return (
     <>
       <Notification notification={notification} />
-      <LoginFrom user={user} setUser={setUser} setErrorMessage={showNotification} />
-      <BlogList user={user} setMessage={showNotification} />
+      <LoginFrom />
+      <BlogList />
     </>
   )
 }

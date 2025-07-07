@@ -1,53 +1,21 @@
 import Blog from './Blog/Blog.jsx'
-import { useEffect, useRef, useState } from 'react'
-import blogService from '../../services/blogs.js'
+import { useRef } from 'react'
 import { BlogForm } from './BlogForm/BlogForm.jsx'
 import { Togglable } from '../Togglable/Togglable.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { createNewBlog } from '../../reducers/blogsReducer.js'
 
-export const BlogList = ({ user, setMessage }) => {
-  const [blogs, setBlogs] = useState([])
+export const BlogList = () => {
+  const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const blogsInDb = await blogService.getAll()
-      setBlogs(blogsInDb)
-    }
-    fetchBlogs()
-  }, [])
-  const createBlog = async (blog) => {
-    try {
-      blogFormRef.current.toggleVisibility()
-      const savedBlog = await blogService.create(blog)
-      setBlogs([...blogs, savedBlog])
-      setMessage({ message: 'Blog created successfully.', type: 'success' })
-      return savedBlog
-    } catch (error) {
-      setMessage({ message: error.message })
-    }
+  const createBlog = (blog) => {
+    blogFormRef.current.toggleVisibility()
+    dispatch(createNewBlog(blog))
   }
 
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.deleteBlog(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
-    } catch (error) {
-      setMessage({ message: error.message })
-    }
-  }
-
-  const updateBlog = async (blogToUpdate) => {
-    try {
-      const updatedBlog = await blogService.update(blogToUpdate)
-      setBlogs(
-        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-      )
-      setMessage({ message: 'Blog updated successfully.', type: 'update' })
-      return updatedBlog
-    } catch (error) {
-      setMessage({ message: error.message })
-    }
-  }
   if (!user) {
     return null
   }
@@ -56,19 +24,11 @@ export const BlogList = ({ user, setMessage }) => {
     <>
       <h2>Blogs</h2>
       <Togglable showLabel="create blog" hideLabel="cancel" ref={blogFormRef}>
-        <BlogForm user={user} createBlog={createBlog}/>
+        <BlogForm user={user} createBlog={createBlog} />
       </Togglable>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            deleteBlog={deleteBlog}
-            update={updateBlog}
-          />
-        ))}
+      {blogs.map((blog) => (
+        <Blog key={blog.id} blog={blog} user={user} />
+      ))}
     </>
   )
 }

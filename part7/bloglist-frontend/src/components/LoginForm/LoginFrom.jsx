@@ -1,35 +1,22 @@
-import loginService from '../../services/login.js'
-import blogService from '../../services/blogs.js'
 import { useState } from 'react'
 import styles from './LoginForm.module.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser, logout } from '../../reducers/userReducer.js'
 
-const LOGGED_USER_ITEM_NAME = 'loggedBlogAppUser'
-
-export const LoginFrom = ({ user, setUser, setErrorMessage }) => {
+export const LoginFrom = () => {
+  const user = useSelector((state) => state.user)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      window.localStorage.setItem(LOGGED_USER_ITEM_NAME, JSON.stringify(user))
-      blogService.setToken(user.token)
-    } catch (exception) {
-      setErrorMessage({message:'Wrong credentials', type: 'error'})
-    }
+    dispatch(loginUser(password, username))
+    setUsername('')
+    setPassword('')
   }
+  const handleLogout = () => dispatch(logout())
 
-  const handleLogout = () => {
-    window.localStorage.removeItem(LOGGED_USER_ITEM_NAME)
-    setUser(null)
-  }
   if (!user) {
     return (
       <>
