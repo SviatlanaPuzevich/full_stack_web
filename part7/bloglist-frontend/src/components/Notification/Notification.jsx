@@ -9,5 +9,11 @@ export const Notification = () => {
   setTimeout(() => {
     notificationDispatch({ type: 'HIDE' })
   }, 3000)
-  return <div className={notification.type ? styles[notification.type] : styles.error}>{notification.message}</div>
+  return (
+    <div
+      className={notification.type ? styles[notification.type] : styles.error}
+    >
+      {notification.message}
+    </div>
+  )
 }

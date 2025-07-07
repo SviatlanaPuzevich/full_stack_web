@@ -1,13 +1,39 @@
 import { useState } from 'react'
 import styles from './BlogForm.module.css'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import blogService from '../../../services/blogs.js'
+import { useNotificationDispatch } from '../../Notification/NotificationContext.jsx'
 
 export const BlogForm = (props) => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
-  const addBlog = async (e) => {
+  const queryClient = useQueryClient()
+  const notificationDispatch = useNotificationDispatch()
+  const createBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: async (newBlog) => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueriesData(['blogs'], [...blogs, newBlog])
+      notificationDispatch({
+        type: 'SHOW',
+        notification: {
+          message: 'Blog created successfully.',
+          type: 'success',
+        },
+      })
+    },
+    onError: (error) => {
+      notificationDispatch({
+        type: 'SHOW',
+        notification: { message: error.response.data.error, type: 'error' },
+      })
+    },
+  })
+  const addBlog = (e) => {
     e.preventDefault()
-    props.createBlog({
+    props.createBlog()
+    createBlogMutation.mutate({
       title,
       author,
       url,

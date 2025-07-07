@@ -17,7 +17,7 @@ const App = () => {
 
   return (
     <>
-      <Notification/>
+      <Notification />
       <LoginFrom user={user} setUser={setUser} />
       <BlogList user={user} />
     </>

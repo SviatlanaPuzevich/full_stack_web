@@ -6,7 +6,7 @@ import { useNotificationDispatch } from '../Notification/NotificationContext.jsx
 
 const LOGGED_USER_ITEM_NAME = 'loggedBlogAppUser'
 
-export const LoginFrom = ({ user, setUser}) => {
+export const LoginFrom = ({ user, setUser }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const notificationDispatch = useNotificationDispatch()
@@ -26,7 +26,7 @@ export const LoginFrom = ({ user, setUser}) => {
     } catch (exception) {
       notificationDispatch({
         type: 'SHOW',
-        notification: { message: 'Wrong credentials', type: 'error' }
+        notification: { message: 'Wrong credentials', type: 'error' },
       })
     }
   }
