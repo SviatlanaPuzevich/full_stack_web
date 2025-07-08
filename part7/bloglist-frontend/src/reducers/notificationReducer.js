@@ -24,7 +24,6 @@ export default notificationSlice.reducer
 
 export const notify = (message, type = 'error') => {
   return (dispatch) => {
-    console.log('notify', message, type)
     dispatch(showNotification({ message, type, visible: true }))
     setTimeout(() => {
       dispatch(hideNotification())

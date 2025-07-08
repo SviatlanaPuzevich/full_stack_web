@@ -21,10 +21,16 @@ const blogsSlice = createSlice({
       return state.filter((blog) => blog.id !== action.payload)
     },
   },
+  selectors: {
+    getBlogById: (state, id) => {
+      return state.find((blog) => blog.id === id)
+    },
+  },
 })
 
 export const { create, getAll, removeBlog, update } = blogsSlice.actions
 export default blogsSlice.reducer
+export const { getBlogById } = blogsSlice.selectors
 
 export const getAllBlogs = () => {
   return async (dispatch) => {

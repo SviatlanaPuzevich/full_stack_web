@@ -2,18 +2,24 @@ import { useState } from 'react'
 import styles from './LoginForm.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logout } from '../../reducers/userReducer.js'
+import { useNavigate } from 'react-router-dom'
 
 export const LoginFrom = () => {
   const user = useSelector((state) => state.user)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    dispatch(loginUser(password, username))
+    const loggedUser = await dispatch(loginUser(password, username))
+
     setUsername('')
     setPassword('')
+    if (loggedUser) {
+      navigate('/blogs')
+    }
   }
   const handleLogout = () => dispatch(logout())
 

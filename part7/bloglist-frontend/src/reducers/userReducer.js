@@ -9,10 +9,9 @@ const userSlice = createSlice({
   initialState: null,
   name: 'user',
   reducers: {
-    getUser: (state, action) => {
+    getUser: () => {
       let user = null
       const loggedUserJSON = window.localStorage.getItem(LOGGED_USER_ITEM_NAME)
-      console.log(loggedUserJSON)
       if (loggedUserJSON) {
         user = JSON.parse(loggedUserJSON)
         blogService.setToken(user.token)
@@ -42,6 +41,7 @@ export const loginUser = (password, username) => {
       blogService.setToken(user.token)
       window.localStorage.setItem(LOGGED_USER_ITEM_NAME, JSON.stringify(user))
       dispatch(login(user))
+      return user
     } catch (e) {
       dispatch(notify('Wrong credentials', 'error'))
     }

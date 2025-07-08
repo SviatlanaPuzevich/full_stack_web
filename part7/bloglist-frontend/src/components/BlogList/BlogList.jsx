@@ -1,9 +1,10 @@
-import Blog from './Blog/Blog.jsx'
 import { useRef } from 'react'
 import { BlogForm } from './BlogForm/BlogForm.jsx'
 import { Togglable } from '../Togglable/Togglable.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { createNewBlog } from '../../reducers/blogsReducer.js'
+import { Link } from 'react-router-dom'
+import styles from './BlogList.module.css'
 
 export const BlogList = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -27,7 +28,11 @@ export const BlogList = () => {
         <BlogForm user={user} createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
+        <div key={blog.id} className={styles.blogContainer}>
+          <Link
+            to={`/blogs/${blog.id}`}
+          >{`${blog.title} ${blog.author} `}</Link>
+        </div>
       ))}
     </>
   )
