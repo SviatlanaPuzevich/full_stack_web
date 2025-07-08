@@ -3,8 +3,9 @@ import {
   deleteBlog,
   getBlogById,
   updateBlog,
-} from '../../../reducers/blogsReducer.js'
+} from '../../reducers/blogsReducer.js'
 import { useParams } from 'react-router-dom'
+import { CommentList } from '../CommentList/CommentList.jsx'
 
 const Blog = () => {
   const id = useParams().id
@@ -19,7 +20,9 @@ const Blog = () => {
   const addLike = () => {
     dispatch(updateBlog({ ...blog, likes: blog.likes + 1 }))
   }
-
+  if (!blog) {
+    return <div>Loading...</div>
+  }
   return (
     <div>
       <h2>
@@ -36,6 +39,7 @@ const Blog = () => {
       {user.username === blog.user?.username && (
         <button onClick={handleDelete}>Delete</button>
       )}
+      <CommentList blogId={blog.id} comments={blog.comments} />
     </div>
   )
 }

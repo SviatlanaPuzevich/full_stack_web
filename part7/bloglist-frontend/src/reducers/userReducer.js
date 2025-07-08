@@ -4,7 +4,7 @@ import blogService from '../services/blogs.js'
 import { notify } from './notificationReducer.js'
 
 const LOGGED_USER_ITEM_NAME = 'loggedBlogAppUser'
-const initUser = ()=> {
+const initUser = () => {
   let user = null
   const loggedUserJSON = window.localStorage.getItem(LOGGED_USER_ITEM_NAME)
   if (loggedUserJSON) {

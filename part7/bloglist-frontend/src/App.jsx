@@ -7,7 +7,7 @@ import { getAllBlogs } from './reducers/blogsReducer.js'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { UsersPage } from './components/UsersPage/UsersPage.jsx'
 import { UserBlogList } from './components/UserBlogList/UserBlogList.jsx'
-import Blog from './components/BlogList/Blog/Blog.jsx'
+import Blog from './components/Blog/Blog.jsx'
 import { NavMenu } from './components/NavMenu/NavMenu.jsx'
 import { RequireAuth } from './components/RequireAuth/RequireAuth.jsx'
 
@@ -15,24 +15,23 @@ const App = () => {
   const notification = useSelector((state) => state.notification)
   const dispatch = useDispatch()
   useEffect(() => {
-    // dispatch(getUser())
-    dispatch(getAllBlogs());
+    console.log('Init')
+    dispatch(getAllBlogs())
   }, [])
 
   return (
     <>
-      <Notification notification={notification}/>
+      <Notification notification={notification} />
       <RequireAuth>
-        <NavMenu/>
+        <NavMenu />
       </RequireAuth>
       <Routes>
-
-        <Route path="/login" element={<LoginFrom/>}/>
+        <Route path="/login" element={<LoginFrom />} />
         <Route
           path="/blogs"
           element={
             <RequireAuth>
-              <BlogList/>
+              <BlogList />
             </RequireAuth>
           }
         />
@@ -41,7 +40,7 @@ const App = () => {
           path="/users"
           element={
             <RequireAuth>
-              <UsersPage/>
+              <UsersPage />
             </RequireAuth>
           }
         />
@@ -49,7 +48,7 @@ const App = () => {
           path="/users/:id"
           element={
             <RequireAuth>
-              <UserBlogList/>
+              <UserBlogList />
             </RequireAuth>
           }
         />
@@ -57,16 +56,11 @@ const App = () => {
           path="/blogs/:id"
           element={
             <RequireAuth>
-              <Blog/>
+              <Blog />
             </RequireAuth>
           }
         />
-        <Route
-          path="/"
-          element={
-            <Navigate to={'/blogs'}/>
-          }
-        />
+        <Route path="/" element={<Navigate to={'/blogs'} />} />
       </Routes>
     </>
   )
