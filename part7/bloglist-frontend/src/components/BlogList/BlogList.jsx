@@ -4,7 +4,7 @@ import { Togglable } from '../Togglable/Togglable.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { createNewBlog } from '../../reducers/blogsReducer.js'
 import { Link } from 'react-router-dom'
-import styles from './BlogList.module.css'
+import { Container, ListGroup, Table } from 'react-bootstrap'
 
 export const BlogList = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -25,15 +25,24 @@ export const BlogList = () => {
     <>
       <h2>Blogs</h2>
       <Togglable showLabel="create blog" hideLabel="cancel" ref={blogFormRef}>
-        <BlogForm user={user} createBlog={createBlog} />
+        <BlogForm user={user} createBlog={createBlog}/>
       </Togglable>
-      {blogs.map((blog) => (
-        <div key={blog.id} className={styles.blogContainer}>
-          <Link
-            to={`/blogs/${blog.id}`}
-          >{`${blog.title} ${blog.author} `}</Link>
-        </div>
-      ))}
+      <Table striped bordered hover size="sm" className="my-3">
+        <tbody>
+        <tr>
+          <th>blog</th>
+          <th>author</th>
+        </tr>
+        {blogs.map((blog) => (
+          <tr key={blog.id}>
+            <td><Link
+              to={`/blogs/${blog.id}`}
+            >{blog.title}</Link></td>
+            <td>{blog.author}</td>
+          </tr>
+        ))}
+        </tbody>
+      </Table>
     </>
   )
 }

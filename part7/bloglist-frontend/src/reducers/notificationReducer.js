@@ -22,7 +22,7 @@ const notificationSlice = createSlice({
 export const { showNotification, hideNotification } = notificationSlice.actions
 export default notificationSlice.reducer
 
-export const notify = (message, type = 'error') => {
+export const notify = (message, type = 'danger') => {
   return (dispatch) => {
     dispatch(showNotification({ message, type, visible: true }))
     setTimeout(() => {

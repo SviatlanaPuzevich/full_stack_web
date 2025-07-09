@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import styles from './BlogForm.module.css'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 export const BlogForm = (props) => {
   const [author, setAuthor] = useState('')
@@ -19,41 +20,32 @@ export const BlogForm = (props) => {
   return (
     <>
       <h2>create new blog</h2>
-      <form onSubmit={addBlog} className={styles.formGrid}>
-        <div className={styles.formRow}>
-          <label>
-            Title:{' '}
-            <input
-              data-testid="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className={styles.formRow}>
-          <label>
-            Author:{' '}
-            <input
-              data-testid="author"
-              value={author}
-              onChange={(event) => setAuthor(event.target.value)}
-            />
-          </label>
-        </div>
-        <div className={styles.formRow}>
-          <label>
-            Url:{' '}
-            <input
-              data-testid="url"
-              value={url}
-              onChange={(event) => setUrl(event.target.value)}
-            />
-          </label>
-        </div>
-        <button data-testid="createBlog" type="submit">
+      <Form onSubmit={addBlog} >
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label column={1}>title</Form.Label>
+          <Form.Control data-testid="title" type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Enter title"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label column={1}>author</Form.Label>
+          <Form.Control  data-testid="author" type="text"
+                         value={author}
+                         onChange={(event) => setAuthor(event.target.value)}
+                        placeholder="Enter author"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label column={1}>URL</Form.Label>
+          <Form.Control  data-testid="url" type="text"
+                         value={url}
+                         onChange={(event) => setUrl(event.target.value)}
+                         placeholder="Enter URL"/>
+        </Form.Group>
+        <Button data-testid="createBlog" type="submit" variant="primary">
           create
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   )
 }

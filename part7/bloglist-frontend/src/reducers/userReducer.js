@@ -42,7 +42,7 @@ export const loginUser = (password, username) => {
       dispatch(login(user))
       return user
     } catch (e) {
-      dispatch(notify('Wrong credentials', 'error'))
+      dispatch(notify('Wrong credentials', 'danger'))
     }
   }
 }

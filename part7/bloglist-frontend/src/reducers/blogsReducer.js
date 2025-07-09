@@ -67,7 +67,7 @@ export const updateBlog = (blog) => {
     try {
       const updatedBlog = await blogService.update(blog)
       dispatch(update(updatedBlog))
-      dispatch(notify('Blog updated successfully.', 'update'))
+      dispatch(notify('Blog updated successfully.', 'info'))
     } catch (error) {
       dispatch(notify(error.response.data.error))
     }
@@ -78,7 +78,7 @@ export const deleteBlog = (id) => {
   return async (dispatch) => {
     await blogService.deleteBlog(id)
     dispatch(removeBlog(id))
-    dispatch(notify('Blog deleted', 'update'))
+    dispatch(notify('Blog deleted', 'info'))
   }
 }
 
@@ -93,7 +93,6 @@ export const createNewComment = (blogId, comment) => {
       dispatch(createComment({ blogId, savedComment }))
       dispatch(notify('Comment added successfully', 'success'))
     } catch (error) {
-      console.log('error ', comment)
       dispatch(notify(error.response.data.error))
     }
   }

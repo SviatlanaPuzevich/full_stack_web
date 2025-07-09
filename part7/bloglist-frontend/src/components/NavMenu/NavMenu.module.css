@@ -1,9 +1,0 @@
-.navContainer {
-  display: flex;
-  gap: 10px;
-  background-color: darkgrey;
-}
-
-.active {
-  color: orange;
-}

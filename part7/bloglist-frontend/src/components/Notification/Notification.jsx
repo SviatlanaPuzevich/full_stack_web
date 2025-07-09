@@ -1,14 +1,12 @@
-import styles from './Notification.module.css'
+import { Alert } from 'react-bootstrap'
 
 export const Notification = ({ notification }) => {
   if (!notification.visible) {
     return null
   }
   return (
-    <div
-      className={notification.type ? styles[notification.type] : styles.error}
-    >
+    <Alert variant={notification.type ? notification.type : 'danger'}>
       {notification.message}
-    </div>
+    </Alert>
   )
 }

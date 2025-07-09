@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllUsers, getUserById } from '../../reducers/usersReducer.js'
 import { useEffect } from 'react'
+import { ListGroup } from 'react-bootstrap'
 
 export const UserBlogList = () => {
   const { id } = useParams()
@@ -19,11 +20,11 @@ export const UserBlogList = () => {
     <>
       <h2>{user.username}</h2>
       <h3>added blogs</h3>
-      <ul>
+      <ListGroup>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{`${blog.title} ${blog.author}`}</li>
+          <ListGroup.Item key={blog.id}>{`${blog.title} ${blog.author}`}</ListGroup.Item>
         ))}
-      </ul>
+        </ListGroup>
     </>
   )
 }

@@ -1,9 +1,0 @@
-.blogContainer {
-  border: solid 1px var(--primary-color);
-  padding: 5px;
-  margin: 5px;
-}
-
-.blogContainer:hover {
-  border-color: var(--hover-primary-color);
-}
