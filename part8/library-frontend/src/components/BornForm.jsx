@@ -6,9 +6,9 @@ export const BornForm = ({ authors }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   const [editAuthor] = useMutation(EDIT_AUTHOR)
-  const updateBorn = (e) => {
+  const updateBorn = async (e) => {
     e.preventDefault()
-    editAuthor({
+    await editAuthor({
       variables: {
         name,
         setBornTo: Number(born),
