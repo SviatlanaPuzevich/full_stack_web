@@ -4,9 +4,10 @@ import NewBook from './components/NewBook'
 import { LoginForm } from './components/LoginForm'
 import { Link, Route, Routes } from 'react-router-dom'
 import { useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import { Notification } from './components/Notification.jsx'
 import { Recommendations } from './components/Recommendations.jsx'
+import { ALL_BOOKS, BOOK_ADDED } from './queries.js'
 
 const App = () => {
   const [message, setMessage] = useState(null)
@@ -14,6 +15,17 @@ const App = () => {
     JSON.parse(localStorage.getItem('libraryAppUser'))
   )
   const client = useApolloClient()
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      alert(addedBook.title)
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
+    }
+  })
 
   const logout = () => {
     localStorage.removeItem('libraryAppUser')
