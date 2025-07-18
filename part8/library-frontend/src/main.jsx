@@ -6,7 +6,7 @@ import {
   ApolloProvider,
   createHttpLink,
   InMemoryCache,
-  split
+  split,
 } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
 import { setContext } from '@apollo/client/link/context'
@@ -27,9 +27,7 @@ const authLink = setContext((_, { headers }) => {
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
 })
-const wsLink = new GraphQLWsLink(
-  createClient({ url: 'ws://localhost:4000' })
-)
+const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000' }))
 
 const splitLink = split(
   ({ query }) => {

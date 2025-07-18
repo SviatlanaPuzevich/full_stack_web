@@ -19,14 +19,8 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       alert(addedBook.title)
-      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(addedBook),
-        }
-      })
-    }
+    },
   })
-
   const logout = () => {
     localStorage.removeItem('libraryAppUser')
     setToken(null)

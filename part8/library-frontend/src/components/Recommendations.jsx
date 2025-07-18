@@ -13,12 +13,10 @@ export const Recommendations = () => {
     },
     skip: !favouriteGenre,
   })
-  console.log(booksResult, 'BOOK RESULT')
   if (result.loading || booksResult.loading) {
     return <div>loading...</div>
   }
   const recommendedBooks = booksResult.data.allBooks
-  console.log(recommendedBooks, '  BOOKs')
   return (
     <>
       <h2>Recommendations</h2>

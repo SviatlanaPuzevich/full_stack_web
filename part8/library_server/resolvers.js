@@ -26,9 +26,13 @@ const resolvers = {
       return books
     },
     allAuthors: async () => {
-     const authors = await Author.find({})
+      const authors = await Author.find({})
       return authors
     },
+    allGenres: async () => {
+      const genres = await Book.distinct('genres')
+      return genres
+    }
   },
   Author: {
     bookCount: async (root, args, context) => {
