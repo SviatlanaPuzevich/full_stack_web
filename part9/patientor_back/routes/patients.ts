@@ -1,16 +1,26 @@
 import express from 'express';
 import {addPatient, getAll} from "../controllers/patients";
-import {PatientEntry} from "../types";
-import {toNewPatientEntry} from "../utils/utils";
+import {NewPatientEntry, newPatientSchema, PatientEntry} from "../types";
+import {z} from "zod";
+import {newPatientParser} from "../utils/middleware";
+import { Request, Response, NextFunction } from 'express';
 
 const router = express.Router();
+const errorMiddleware = (error: unknown, _req: Request, res: Response, next: NextFunction) => {
+    if (error instanceof z.ZodError) {
+        res.status(400).send({ error: error.issues });
+    } else {
+        next(error);
+    }
+};
 
-router.get('/', (_req: express.Request, res: express.Response<PatientEntry []>) => {
+router.get('/', (_req: Request, res: Response<PatientEntry []>) => {
     res.send(getAll());
 });
 
-router.post('/', (req: express.Request, res: express.Response<PatientEntry>) => {
-    res.send(addPatient(toNewPatientEntry(req.body)));
+router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientEntry>, res: Response<PatientEntry>) => {
+    res.send(addPatient(newPatientSchema.parse(req.body)));
 });
+router.use(errorMiddleware)
 
 export default router;
