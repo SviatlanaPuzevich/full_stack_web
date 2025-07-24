@@ -12,16 +12,21 @@ export enum Gender {
     Other = 'other'
 }
 
-export interface Patient{
+export interface Entry {
+
+}
+
+export interface Patient {
     id: string;
     name: string;
     dateOfBirth: string;
     ssn: string;
     gender: Gender;
     occupation: string;
+    entries: Entry[];
 }
 
-export type PatientEntry = Omit<Patient, 'ssn'>;
+export type PatientEntry = Omit<Patient, 'ssn' | "entries">;
 export type NewPatientEntry = z.infer<typeof newPatientSchema>;
 
 export const newPatientSchema = z.object({

@@ -1,6 +1,6 @@
 import express from 'express';
-import {addPatient, getAll} from "../controllers/patients";
-import {NewPatientEntry, newPatientSchema, PatientEntry} from "../types";
+import {addPatient, getAll, getById} from "../controllers/patients";
+import {NewPatientEntry, newPatientSchema, Patient, PatientEntry} from "../types";
 import {z} from "zod";
 import {newPatientParser} from "../utils/middleware";
 import { Request, Response, NextFunction } from 'express';
@@ -21,6 +21,11 @@ router.get('/', (_req: Request, res: Response<PatientEntry []>) => {
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientEntry>, res: Response<PatientEntry>) => {
     res.send(addPatient(newPatientSchema.parse(req.body)));
 });
+
+router.get('/:id', (req: Request, res: Response<Patient>) => {
+    res.send(getById(req.params.id));
+});
+
 router.use(errorMiddleware)
 
 export default router;
