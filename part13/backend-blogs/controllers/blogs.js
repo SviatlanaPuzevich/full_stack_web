@@ -1,63 +1,54 @@
-const Blog = require( '../models/Blogs')
+const Blog = require('../models/Blogs')
+const { blogFinder } = require('../utils/middleware')
 const blogsRouter = require('express').Router()
 
 
-blogsRouter.get('/', async (req, res) => {
-  const blogs = await Blog.findAll()
-  res.json(blogs)
+blogsRouter.get('/', async (req, res, next) => {
+  try {
+    const blogs = await Blog.findAll()
+    res.json(blogs)
+  } catch (error) {
+    next(error)
+  }
+
 })
 
-blogsRouter.get('/:id', async (req, res, next) => {
+blogsRouter.get('/:id', blogFinder, async (req, res, next) => {
   try {
-    const blog = await Blog.findByPk(req.params.id)
-    if (blog) {
-      res.json(blog)
-    } else {
-      return res.status(404).end()
-    }
+    res.json(req.blog)
   } catch (error) {
-    return res.status(400).json({ error })
+    next(error)
   }
 })
 
 blogsRouter.post('/', async (req, res, next) => {
   try {
-    const savedBlog = await Blog.create( req.body)
+    const savedBlog = await Blog.create(req.body)
     res.status(201).json(savedBlog)
   } catch (error) {
-    return res.status(400).json({ error })
+    next(error)
   }
 })
 
-blogsRouter.delete('/:id', async (req, res, next) => {
+blogsRouter.delete('/:id', blogFinder, async (req, res, next) => {
   try {
-    const blogId = req.params.id;
-    await Blog.destroy({
-      where: {
-        id: blogId
-      }
-    });
+    const blog = req.blog
+    await blog.destroy()
     res.status(204).end()
   } catch (error) {
-    return res.status(400).json({ error })
+    next(error)
   }
 })
 
-blogsRouter.put('/:id', async (req, res, next) => {
-  const { title, author, url, likes } = req.body
+blogsRouter.put('/:id', blogFinder, async (req, res, next) => {
+  const { likes } = req.body
   try {
-    const blog = await Blog.findByPk(req.params.id)
-    if (!blog) {
-      return res.status(404).end()
-    }
-    blog.title = title
-    blog.author = author
-    blog.url = url
+    const blog = req.blog
     blog.likes = likes
     const updatedBlog = await blog.save()
     res.json(updatedBlog)
   } catch (error) {
-    return res.status(400).json({ error })
+    return next(error)
   }
 })
 
