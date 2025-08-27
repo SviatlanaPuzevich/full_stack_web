@@ -1,0 +1,8 @@
+sudo docker start -i adoring_shannon
+apt-get update
+apt-get -y install nano
+nano /usr/src/app/index.js
+
+ctrl+c console.log('Hello World')
+ctr+o
+ctrl+x

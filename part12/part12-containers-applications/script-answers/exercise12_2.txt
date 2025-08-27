@@ -1,0 +1,4 @@
+sudo docker run -it ubuntu bash
+mkdir -p /usr/src/app
+> /usr/src/app/index.js
+exit
