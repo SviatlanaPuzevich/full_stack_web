@@ -1,16 +1,24 @@
-const {Blog, User} = require('../models')
+const { Blog, User } = require('../models')
 const { blogFinder, userExtractor } = require('../utils/middleware')
-const models = require('../models')
+const { Op } = require('sequelize')
 const blogsRouter = require('express').Router()
 
 
 blogsRouter.get('/', async (req, res, next) => {
   try {
+    const where = {}
+
+    if (req.query.search) {
+      where[Op.or] = [{ title: { [Op.iLike]: `%${req.query.search}%` } },
+        { author: { [Op.iLike]: `%${req.query.search}%` } }]
+    }
     const blogs = await Blog.findAll({
         include: {
           model: User,
           attributes: { exclude: ['userId'] }
-        }
+        },
+        where,
+      order: [['likes', 'DESC']],
       }
     )
     res.json(blogs)
@@ -41,7 +49,7 @@ blogsRouter.delete('/:id', userExtractor, async (req, res, next) => {
   try {
     const userId = req.user.id
     const blogId = req.params.id
-    const deleted = await Blog.destroy( {
+    const deleted = await Blog.destroy({
       where: {
         id: blogId,
         userId: userId
