@@ -37,8 +37,13 @@ blogsRouter.get('/:id', blogFinder, async (req, res, next) => {
 
 blogsRouter.post('/', userExtractor, async (req, res, next) => {
   try {
-    const userId = req.user.id
-    const savedBlog = await Blog.create({ userId, ...req.body })
+    const { title, author, url, likes, year } = req.body;
+    const savedBlog = await Blog.create({  title,
+      author,
+      url,
+      likes,
+      year,
+      user_id: req.user.id })
     res.status(201).json(savedBlog)
   } catch (error) {
     next(error)

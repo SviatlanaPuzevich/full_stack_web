@@ -1,6 +1,5 @@
-const { Blog, User } = require('../models')
-const { Op } = require('sequelize')
-const sequelize = require('../utils/db')
+const { Blog } = require('../models')
+const {sequelize} = require('../utils/db')
 const authorsRouter = require('express').Router()
 
 
