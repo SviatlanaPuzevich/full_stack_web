@@ -18,7 +18,7 @@ blogsRouter.get('/', async (req, res, next) => {
           attributes: { exclude: ['userId'] }
         },
         where,
-      order: [['likes', 'DESC']],
+        order: [['likes', 'DESC']],
       }
     )
     res.json(blogs)
@@ -38,12 +38,14 @@ blogsRouter.get('/:id', blogFinder, async (req, res, next) => {
 blogsRouter.post('/', userExtractor, async (req, res, next) => {
   try {
     const { title, author, url, likes, year } = req.body;
-    const savedBlog = await Blog.create({  title,
+    const savedBlog = await Blog.create({
+      title,
       author,
       url,
       likes,
       year,
-      user_id: req.user.id })
+      userId: req.user.id
+    })
     res.status(201).json(savedBlog)
   } catch (error) {
     next(error)

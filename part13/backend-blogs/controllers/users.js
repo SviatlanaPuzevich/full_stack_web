@@ -1,4 +1,5 @@
-const {User, Blog} = require('../models')
+const { User, Blog, ReadingList } = require('../models')
+const { Op } = require('sequelize')
 const usersRouter = require('express').Router()
 
 usersRouter.get('/', async (req, res, next) => {
@@ -30,12 +31,12 @@ usersRouter.post('/', async (req, res, next) => {
 usersRouter.put('/:username', async (req, res, next) => {
   const username = req.params.username
   try {
-    const user = await User.findOne( {
+    const user = await User.findOne({
       where: {
         username
       }
     })
-    if (!user){
+    if (!user) {
       return res.status(400)
     }
     user.name = req.body.name
@@ -45,5 +46,31 @@ usersRouter.put('/:username', async (req, res, next) => {
     return next(error)
   }
 })
+
+usersRouter.get('/:id', async (req, res, next) => {
+  try {
+    const where = {}
+
+    if (req.query.read) {
+      where.read = req.query.read
+    }
+    const users = await User.findByPk(req.params.id, {
+      include: {
+        model: Blog,
+        as: 'readingList',
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+        through: {
+          as: 'readings',
+          attributes: ['id', 'read'],
+          where
+        },
+      }
+    })
+    res.json(users)
+  } catch (error) {
+    next(error)
+  }
+})
+
 
 module.exports = usersRouter
