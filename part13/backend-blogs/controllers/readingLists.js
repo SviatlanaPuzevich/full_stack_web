@@ -1,5 +1,4 @@
 const { Blog, ReadingList } = require('../models')
-const { sequelize } = require('../utils/db')
 const { userExtractor } = require('../utils/middleware')
 const User = require('../models/User')
 const readingListsRouter = require('express').Router()

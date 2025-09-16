@@ -1,5 +1,4 @@
-const { User, Blog, ReadingList } = require('../models')
-const { Op } = require('sequelize')
+const { User, Blog } = require('../models')
 const usersRouter = require('express').Router()
 
 usersRouter.get('/', async (req, res, next) => {
