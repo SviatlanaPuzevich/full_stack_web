@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./todo-backend
+      dockerfile: Dockerfile
+    image: express-server
+    env_file:
+      - ./todo-backend/.env
+    container_name: backend
+
+  frontend:
+    build:
+      context: ./todo-frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    env_file:
+      - ./todo-frontend/.env
+    ports:
+      - "80:80"
+
+  nginx-proxy:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - backend
+      - frontend
