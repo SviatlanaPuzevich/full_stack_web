@@ -2,6 +2,7 @@ const Blog = require('../models/Blogs')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('./config')
+const { Session } = require('../models')
 
 
 const unknownEndpoint = (request, response) => {
@@ -32,7 +33,7 @@ const tokenExtractor = (req, res, next) => {
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
-    } catch{
+    } catch {
       return res.status(401).json({ error: 'token invalid' })
     }
   }
@@ -44,6 +45,19 @@ const userExtractor = async (request, response, next) => {
   const user = await User.findByPk(id)
   if (!user) {
     return response.status(400).json({ error: 'userId missing or not valid' })
+  }
+  if (user.disabled === true) {
+    return response.status(403).json({ error: 'user account disabled' })
+  }
+  const token = request.get('authorization').substring(7)
+  const session = await Session.findOne({
+    where: {
+      userId: user.id,
+      token
+    }
+  })
+  if (!session) {
+    return response.status(401).json({ error: 'session is expired' })
   }
   request.user = user
   next()
