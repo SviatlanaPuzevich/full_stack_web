@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./bloglist-backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./bloglist-backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGODB_URI=mongodb://the_username:the_password@mongo:27017/blog_list_dev
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: blog_list_dev
+    volumes:
+      - ./bloglist-backend/mongo_init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+#      - ./bloglist-backend/mongo_data:/data/db
+  frontend:
+    build:
+      context: ./bloglist-frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./bloglist-frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: blog-reverse-proxy
+    depends_on:
+      - backend
+      - frontend
